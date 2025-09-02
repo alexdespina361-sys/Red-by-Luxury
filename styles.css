@@ -1116,6 +1116,12 @@ footer {
   display: flex;
   justify-content: center;
 }
+/* make sure padding and borders are included in widths */
+.carousel, .carousel-slide, .product-card { box-sizing: border-box; }
+
+/* ensure .carousel is exactly the viewport area for the slides */
+.carousel-container { overflow: hidden; width: 100%; }
+.carousel { display: flex; transition: transform .45s ease; }
 
 /* Desktop: 3 products visible */
 @media (min-width: 1025px) {
