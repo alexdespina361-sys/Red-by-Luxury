@@ -1090,52 +1090,41 @@ footer {
     }
 }
 
-/* Responsive carousel */
+/* container + track */
+.carousel-container { overflow: hidden; }
+.carousel {
+  display: flex;
+  transition: transform 0.45s ease;
+  will-change: transform;
+}
+
+/* Each slide is a flex item. We set flex-basis per breakpoint so multiple slides can be visible */
 .carousel-slide {
-    min-width: 100%;
-    display: flex;
-    justify-content: center;
+  box-sizing: border-box;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  flex: 0 0 100%; /* fallback: 1 per view */
 }
 
-/* Mobile: 1 product per slide */
-@media (max-width: 768px) {
-    .carousel-slide .product-card {
-        width: 90%;
-        margin: 10px auto;
-    }
-    
-    .carousel-slide {
-        flex-direction: column;
-        align-items: center;
-    }
-}
-
-/* Tablet: 2 products per slide */
-@media (min-width: 769px) and (max-width: 1024px) {
-    .carousel-slide {
-        flex-direction: row;
-        justify-content: center;
-        flex-wrap: wrap;
-    }
-    
-    .carousel-slide .product-card {
-        width: 45%;
-        margin: 10px;
-    }
-}
-
-/* Desktop: 3 products per slide */
+/* Desktop: 3 products per view */
 @media (min-width: 1025px) {
-    .carousel-slide {
-        flex-direction: row;
-        justify-content: center;
-    }
-    
-    .carousel-slide .product-card {
-        width: 30%;
-        margin: 10px;
-    }
+  .carousel-slide { flex: 0 0 33.3333%; }
+  .carousel-slide .product-card { width: 95%; }
 }
+
+/* Tablet: 2 products per view */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .carousel-slide { flex: 0 0 50%; }
+  .carousel-slide .product-card { width: 95%; }
+}
+
+/* Mobile: 1 product per view (falls back to 100%) */
+@media (max-width: 768px) {
+  .carousel-slide { flex: 0 0 100%; }
+  .carousel-slide .product-card { width: 90%; margin: 10px auto; }
+}
+
 
 /* Product card adjustments for mobile */
 @media (max-width: 768px) {
