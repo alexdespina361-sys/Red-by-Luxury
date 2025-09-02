@@ -309,7 +309,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
   const carousel = document.querySelector('.carousel');
-  const slides = Array.from(document.querySelectorAll('.carousel-slide'));
+  const slide = document.querySelector('.carousel-slide');
   const prevBtn = document.querySelector('.prev-btn');
   const nextBtn = document.querySelector('.next-btn');
   let currentIndex = 0;
@@ -321,23 +321,23 @@
   }
 
   let slidesPerView = getSlidesPerView();
-  const slideCount = slides.length;
+  // Total number of products divided by slides per view
+  const totalProducts = document.querySelectorAll('.product-card').length;
+  const maxIndex = Math.ceil(totalProducts / slidesPerView) - 1;
 
   function clampIndex(idx) {
-    return Math.max(0, Math.min(idx, Math.max(0, slideCount - slidesPerView)));
+    return Math.max(0, Math.min(idx, maxIndex));
   }
 
   function updateTransform() {
-    // move by one slide width — the percent is based on slidesPerView
-    const percent = (currentIndex * (100 / slidesPerView));
+    // Calculate the percentage to move based on current index and slides per view
+    const percent = (currentIndex * (100 / (totalProducts / slidesPerView)));
     carousel.style.transform = `translateX(-${percent}%)`;
   }
 
   function moveCarousel(direction) {
     if (direction === 'next') {
       currentIndex = clampIndex(currentIndex + 1);
-      // if we reached the end, wrap to 0 (optional)
-      if (currentIndex >= slideCount - slidesPerView) currentIndex = 0;
     } else {
       currentIndex = clampIndex(currentIndex - 1);
     }
@@ -349,7 +349,16 @@
 
   // react to resize: recompute slidesPerView and clamp index
   window.addEventListener('resize', () => {
+    const oldSlidesPerView = slidesPerView;
     slidesPerView = getSlidesPerView();
+    
+    // Adjust current index when slides per view changes
+    if (slidesPerView !== oldSlidesPerView) {
+      // Convert current position to new scale
+      const newPosition = (currentIndex * oldSlidesPerView) / slidesPerView;
+      currentIndex = Math.round(newPosition);
+    }
+    
     currentIndex = clampIndex(currentIndex);
     updateTransform();
   });
