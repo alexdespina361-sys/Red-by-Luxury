@@ -307,12 +307,31 @@
 
     <script src="script.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', () => {
   const carousel = document.querySelector('.carousel');
-  const slide = document.querySelector('.carousel-slide');
   const prevBtn = document.querySelector('.prev-btn');
   const nextBtn = document.querySelector('.next-btn');
+  if (!carousel) return;
+
+  // --- Step 1: ensure each product-card is its own .carousel-slide ---
+  // Collect product cards anywhere inside the carousel (works with your grouped HTML)
+  const productCards = Array.from(carousel.querySelectorAll('.product-card'));
+  // Clear carousel and re-create slides one-per-product
+  carousel.innerHTML = '';
+  productCards.forEach(card => {
+    const slide = document.createElement('div');
+    slide.className = 'carousel-slide';
+    slide.appendChild(card); // moves element into slide
+    carousel.appendChild(slide);
+  });
+
+  const slides = Array.from(carousel.querySelectorAll('.carousel-slide'));
+  const slideCount = slides.length;
   let currentIndex = 0;
+  let slidesPerView = getSlidesPerView();
+  let slideWidth = 0;
+  let autoplayInterval = null;
+  const AUTOPLAY_MS = 4000;
 
   function getSlidesPerView() {
     if (window.innerWidth <= 768) return 1;
@@ -320,55 +339,92 @@
     return 3;
   }
 
-  let slidesPerView = getSlidesPerView();
-  // Total number of products divided by slides per view
-  const totalProducts = document.querySelectorAll('.product-card').length;
-  const maxIndex = Math.ceil(totalProducts / slidesPerView) - 1;
+  function updateSlideWidth() {
+    // width of one slide (includes padding)
+    slideWidth = slides[0] ? slides[0].getBoundingClientRect().width : 0;
+  }
 
-  function clampIndex(idx) {
-    return Math.max(0, Math.min(idx, maxIndex));
+  function maxIndex() {
+    return Math.max(0, slideCount - slidesPerView);
+  }
+
+  function clampIndex(i) {
+    return Math.max(0, Math.min(i, maxIndex()));
   }
 
   function updateTransform() {
-    // Calculate the percentage to move based on current index and slides per view
-    const percent = (currentIndex * (100 / (totalProducts / slidesPerView)));
-    carousel.style.transform = `translateX(-${percent}%)`;
+    const translateX = currentIndex * slideWidth;
+    carousel.style.transform = `translateX(-${translateX}px)`;
   }
 
+  // Move by one "page" (slidesPerView) so the visible set changes cleanly
   function moveCarousel(direction) {
     if (direction === 'next') {
-      currentIndex = clampIndex(currentIndex + 1);
+      currentIndex += slidesPerView;
+      if (currentIndex > maxIndex()) currentIndex = 0; // wrap
     } else {
-      currentIndex = clampIndex(currentIndex - 1);
+      currentIndex -= slidesPerView;
+      if (currentIndex < 0) currentIndex = Math.max(0, maxIndex());
     }
     updateTransform();
   }
 
-  if (prevBtn) prevBtn.addEventListener('click', () => moveCarousel('prev'));
-  if (nextBtn) nextBtn.addEventListener('click', () => moveCarousel('next'));
-
-  // react to resize: recompute slidesPerView and clamp index
-  window.addEventListener('resize', () => {
-    const oldSlidesPerView = slidesPerView;
-    slidesPerView = getSlidesPerView();
-    
-    // Adjust current index when slides per view changes
-    if (slidesPerView !== oldSlidesPerView) {
-      // Convert current position to new scale
-      const newPosition = (currentIndex * oldSlidesPerView) / slidesPerView;
-      currentIndex = Math.round(newPosition);
+  function startAutoplay() {
+    stopAutoplay();
+    if (slideCount > slidesPerView) {
+      autoplayInterval = setInterval(() => moveCarousel('next'), AUTOPLAY_MS);
     }
-    
-    currentIndex = clampIndex(currentIndex);
-    updateTransform();
+  }
+
+  function stopAutoplay() {
+    if (autoplayInterval) {
+      clearInterval(autoplayInterval);
+      autoplayInterval = null;
+    }
+  }
+
+  // Attach buttons
+  if (prevBtn) prevBtn.addEventListener('click', () => { moveCarousel('prev'); startAutoplay(); });
+  if (nextBtn) nextBtn.addEventListener('click', () => { moveCarousel('next'); startAutoplay(); });
+
+  // Pause on hover
+  carousel.addEventListener('mouseenter', stopAutoplay);
+  carousel.addEventListener('mouseleave', startAutoplay);
+
+  // Responsive: recompute slidesPerView and widths on resize
+  let resizeTimer = null;
+  window.addEventListener('resize', () => {
+    if (resizeTimer) clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      const oldSpv = slidesPerView;
+      slidesPerView = getSlidesPerView();
+      updateSlideWidth();
+      // When slidesPerView changed, convert currentIndex to nearest page
+      if (slidesPerView !== oldSpv) {
+        const page = Math.floor(currentIndex / oldSpv);
+        currentIndex = clampIndex(page * slidesPerView);
+      } else {
+        currentIndex = clampIndex(currentIndex);
+      }
+      updateTransform();
+      startAutoplay();
+    }, 100);
   });
 
-  // autoplay
-  setInterval(() => moveCarousel('next'), 5000);
-
-  // initial layout
+  // Initial layout
+  slidesPerView = getSlidesPerView();
+  updateSlideWidth();
+  currentIndex = clampIndex(0);
   updateTransform();
+  startAutoplay();
+
+  // In case images change layout after load, recalc widths after window load
+  window.addEventListener('load', () => {
+    updateSlideWidth();
+    updateTransform();
+  });
 });
+
 
     </script>
 </body>
