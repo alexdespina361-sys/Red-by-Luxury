@@ -14,7 +14,7 @@
     <header>
         <div class="header-container">
             <div class="logo">
-                <h1><a href="/">RED <span>by Luxury</span></a></h1>
+                <h1><a href="/Red-by-Luxury/">RED <span>by Luxury</span></a></h1>
                 <p>Parfumuri de Lux</p>
             </div>
             <nav>
@@ -66,6 +66,8 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="carousel-slide">
                         <div class="product-card" data-id="prod_LX2">
                             <div class="product-badge sale">Reducere</div>
                             <img src="https://res.cloudinary.com/dkdzz4btm/image/upload/v1756822713/52527b57-1f7c-43bb-9adf-c703c8ab20bc_zmbiox.jpg" alt="Red Noir">
@@ -78,6 +80,8 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="carousel-slide">
                         <div class="product-card" data-id="prod_LX3">
                             <img src="https://res.cloudinary.com/dkdzz4btm/image/upload/v1756822713/25ad17a8-cccc-49d3-af60-eaaf69ea075a_z7ngrr.jpg" alt="Red Oriental">
                             <div class="product-info">
@@ -104,6 +108,8 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="carousel-slide">
                         <div class="product-card" data-id="prod_LX5">
                             <div class="product-badge">Nou</div>
                             <img src="https://res.cloudinary.com/dkdzz4btm/image/upload/v1756822713/57c5df8b-e31d-4c67-a9fa-34f5a1dc8b61_hgdndh.jpg" alt="Red Rosa">
@@ -116,6 +122,8 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="carousel-slide">
                         <div class="product-card" data-id="prod_LX6">
                             <div class="product-badge sale">Reducere</div>
                             <img src="https://res.cloudinary.com/dkdzz4btm/image/upload/v1756822713/52527b57-1f7c-43bb-9adf-c703c8ab20bc_zmbiox.jpg" alt="Red Woods">
@@ -144,6 +152,8 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="carousel-slide">
                         <div class="product-card" data-id="prod_LX8">
                             <img src="https://res.cloudinary.com/dkdzz4btm/image/upload/v1756822713/25ad17a8-cccc-49d3-af60-eaaf69ea075a_z7ngrr.jpg" alt="Red Musk">
                             <div class="product-info">
@@ -155,6 +165,8 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="carousel-slide">
                         <div class="product-card" data-id="prod_LX9">
                             <div class="product-badge sale">Reducere</div>
                             <img src="https://res.cloudinary.com/dkdzz4btm/image/upload/v1756822713/57c5df8b-e31d-4c67-a9fa-34f5a1dc8b61_hgdndh.jpg" alt="Red Gardenia">
@@ -182,6 +194,8 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="carousel-slide">
                         <div class="product-card" data-id="prod_LX11">
                             <div class="product-badge">Nou</div>
                             <img src="https://res.cloudinary.com/dkdzz4btm/image/upload/v1756822713/52527b57-1f7c-43bb-9adf-c703c8ab20bc_zmbiox.jpg" alt="Red Vetiver">
@@ -194,6 +208,8 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="carousel-slide">
                         <div class="product-card" data-id="prod_LX12">
                             <div class="product-badge sale">Reducere</div>
                             <img src="https://res.cloudinary.com/dkdzz4btm/image/upload/v1756822714/3f2e08bd-9ce1-4225-ad64-c90427b8e4b8_fhlv2v.jpg" alt="Red Jasmine">
@@ -295,5 +311,64 @@
     </footer>
 
     <script src="script.js"></script>
+    <script>
+        // Mobile header behavior
+        document.addEventListener('DOMContentLoaded', function() {
+            const header = document.querySelector('header');
+            let lastScrollTop = 0;
+            
+            window.addEventListener('scroll', function() {
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                
+                // Only on mobile devices
+                if (window.innerWidth <= 768) {
+                    if (scrollTop > lastScrollTop && scrollTop > 100) {
+                        // Scrolling down - hide header
+                        header.style.transform = 'translateY(-100%)';
+                    } else {
+                        // Scrolling up - show header
+                        header.style.transform = 'translateY(0)';
+                    }
+                    lastScrollTop = scrollTop;
+                } else {
+                    // Reset on desktop
+                    header.style.transform = 'translateY(0)';
+                }
+            });
+            
+            // Carousel functionality
+            const carousel = document.querySelector('.carousel');
+            const slides = document.querySelectorAll('.carousel-slide');
+            const prevBtn = document.querySelector('.prev-btn');
+            const nextBtn = document.querySelector('.next-btn');
+            let currentIndex = 0;
+            const slideCount = slides.length;
+            
+            // Function to move carousel
+            function moveCarousel(direction) {
+                if (direction === 'next') {
+                    currentIndex = (currentIndex + 1) % slideCount;
+                } else {
+                    currentIndex = (currentIndex - 1 + slideCount) % slideCount;
+                }
+                
+                carousel.style.transform = `translateX(-${currentIndex * 100}%)`;
+            }
+            
+            // Event listeners for buttons
+            if (prevBtn) {
+                prevBtn.addEventListener('click', () => moveCarousel('prev'));
+            }
+            
+            if (nextBtn) {
+                nextBtn.addEventListener('click', () => moveCarousel('next'));
+            }
+            
+            // Auto-scroll for carousel
+            setInterval(() => {
+                moveCarousel('next');
+            }, 5000);
+        });
+    </script>
 </body>
 </html>
