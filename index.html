@@ -306,63 +306,60 @@
 
     <script src="script.js"></script>
     <script>
-        // Mobile header behavior
         document.addEventListener('DOMContentLoaded', function() {
-            const header = document.querySelector('header');
-            let lastScrollTop = 0;
-            
-            window.addEventListener('scroll', function() {
-                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-                
-                // Only on mobile devices
-                if (window.innerWidth <= 768) {
-                    if (scrollTop > lastScrollTop && scrollTop > 100) {
-                        // Scrolling down - hide header
-                        header.style.transform = 'translateY(-100%)';
-                    } else {
-                        // Scrolling up - show header
-                        header.style.transform = 'translateY(0)';
-                    }
-                    lastScrollTop = scrollTop;
-                } else {
-                    // Reset on desktop
-                    header.style.transform = 'translateY(0)';
-                }
-            });
-            
-            // Carousel functionality
-            const carousel = document.querySelector('.carousel');
-            const slides = document.querySelectorAll('.carousel-slide');
-            const prevBtn = document.querySelector('.prev-btn');
-            const nextBtn = document.querySelector('.next-btn');
-            let currentIndex = 0;
-            const slideCount = slides.length;
-            
-            // Function to move carousel
-            function moveCarousel(direction) {
-                if (direction === 'next') {
-                    currentIndex = (currentIndex + 1) % slideCount;
-                } else {
-                    currentIndex = (currentIndex - 1 + slideCount) % slideCount;
-                }
-                
-                carousel.style.transform = `translateX(-${currentIndex * 100}%)`;
-            }
-            
-            // Event listeners for buttons
-            if (prevBtn) {
-                prevBtn.addEventListener('click', () => moveCarousel('prev'));
-            }
-            
-            if (nextBtn) {
-                nextBtn.addEventListener('click', () => moveCarousel('next'));
-            }
-            
-            // Auto-scroll for carousel
-            setInterval(() => {
-                moveCarousel('next');
-            }, 5000);
-        });
+  const carousel = document.querySelector('.carousel');
+  const slides = Array.from(document.querySelectorAll('.carousel-slide'));
+  const prevBtn = document.querySelector('.prev-btn');
+  const nextBtn = document.querySelector('.next-btn');
+  let currentIndex = 0;
+
+  function getSlidesPerView() {
+    if (window.innerWidth <= 768) return 1;
+    if (window.innerWidth <= 1024) return 2;
+    return 3;
+  }
+
+  let slidesPerView = getSlidesPerView();
+  const slideCount = slides.length;
+
+  function clampIndex(idx) {
+    return Math.max(0, Math.min(idx, Math.max(0, slideCount - slidesPerView)));
+  }
+
+  function updateTransform() {
+    // move by one slide width — the percent is based on slidesPerView
+    const percent = (currentIndex * (100 / slidesPerView));
+    carousel.style.transform = `translateX(-${percent}%)`;
+  }
+
+  function moveCarousel(direction) {
+    if (direction === 'next') {
+      currentIndex = clampIndex(currentIndex + 1);
+      // if we reached the end, wrap to 0 (optional)
+      if (currentIndex >= slideCount - slidesPerView) currentIndex = 0;
+    } else {
+      currentIndex = clampIndex(currentIndex - 1);
+    }
+    updateTransform();
+  }
+
+  if (prevBtn) prevBtn.addEventListener('click', () => moveCarousel('prev'));
+  if (nextBtn) nextBtn.addEventListener('click', () => moveCarousel('next'));
+
+  // react to resize: recompute slidesPerView and clamp index
+  window.addEventListener('resize', () => {
+    slidesPerView = getSlidesPerView();
+    currentIndex = clampIndex(currentIndex);
+    updateTransform();
+  });
+
+  // autoplay
+  setInterval(() => moveCarousel('next'), 5000);
+
+  // initial layout
+  updateTransform();
+});
+
     </script>
 </body>
 </html>
