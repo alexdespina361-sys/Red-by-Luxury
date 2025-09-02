@@ -1,0 +1,56 @@
+[
+  {
+    "id": "prod_LX1",
+    "name": "Red Signature",
+    "description": "O combinație rafinată de vanilie, oud și ambroxan",
+    "price": 499,
+    "image": "https://res.cloudinary.com/dkdzz4btm/image/upload/w_500,q_auto,f_auto/v1756822714/3f2e08bd-9ce1-4225-ad64-c90427b8e4b8_fhlv2v.jpg",
+    "badge": "Nou",
+    "reduced": false
+  },
+  {
+    "id": "prod_LX2",
+    "name": "Red Noir",
+    "description": "Jasmine, ylang-ylang și un strop de lămâie verde",
+    "price": 449,
+    "image": "https://res.cloudinary.com/dkdzz4btm/image/upload/w_500,q_auto,f_auto/v1756822713/52527b57-1f7c-43bb-9adf-c703c8ab20bc_zmbiox.jpg",
+    "badge": "Reducere",
+    "reduced": true
+  },
+  {
+    "id": "prod_LX3",
+    "name": "Red Oriental",
+    "description": "Cu note de cardamom, santal și mosc alb",
+    "price": 529,
+    "image": "https://res.cloudinary.com/dkdzz4btm/image/upload/w_500,q_auto,f_auto/v1756822713/25ad17a8-cccc-49d3-af60-eaaf69ea075a_z7ngrr.jpg",
+    "badge": "",
+    "reduced": false
+  },
+  {
+    "id": "prod_LX4",
+    "name": "Red Citrus",
+    "description": "Bergamotă, grapefruit și mentă verde",
+    "price": 399,
+    "image": "https://res.cloudinary.com/dkdzz4btm/image/upload/w_500,q_auto,f_auto/v1756822713/7bf209e6-0b00-4d44-9fac-8d193bc7fc54_vvu6bf.jpg",
+    "badge": "",
+    "reduced": false
+  },
+  {
+    "id": "prod_LX5",
+    "name": "Red Rosa",
+    "description": "Roză de Damasc, mosc și vanilie bourbon",
+    "price": 479,
+    "image": "https://res.cloudinary.com/dkdzz4btm/image/upload/w_500,q_auto,f_auto/v1756822713/57c5df8b-e31d-4c67-a9fa-34f5a1dc8b61_hgdndh.jpg",
+    "badge": "Nou",
+    "reduced": false
+  },
+  {
+    "id": "prod_LX6",
+    "name": "Red Woods",
+    "description": "Cedru, vetiver și un strop de lavandă",
+    "price": 429,
+    "image": "https://res.cloudinary.com/dkdzz4btm/image/upload/w_500,q_auto,f_auto/v1756822713/52527b57-1f7c-43bb-9adf-c703c8ab20bc_zmbiox.jpg",
+    "badge": "Reducere",
+    "reduced": true
+  }
+]

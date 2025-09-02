@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produse - Red by Luxury</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <h1><a href="/">RED <span>by Luxury</span></a></h1>
+                <p>Parfumuri de Lux</p>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="/">Acasă</a></li>
+                    <li><a href="/products.html" class="active">Produse</a></li>
+                    <li><a href="/about.html">Despre Noi</a></li>
+                    <li><a href="/contact.html">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="header-icons">
+                <a href="/search.html"><i class="fas fa-search"></i></a>
+                <a href="/cart.html" class="cart-icon">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span class="cart-count">0</span>
+                </a>
+                <a href="/account.html"><i class="fas fa-user"></i></a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Products Section -->
+    <section class="products-page">
+        <div class="container">
+            <h2>Toate Produsele</h2>
+            <div class="product-grid" id="products-container">
+                <!-- Produsele vor fi încărcate dinamic -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>RED <span>by Luxury</span></h3>
+                    <p>Parfumuri de lux create pentru oameni excepționali</p>
+                    <div class="social-icons">
+                        <a href="https://www.facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.pinterest.com" target="_blank"><i class="fab fa-pinterest-p"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Linkuri Utile</h4>
+                    <ul>
+                        <li><a href="/">Acasă</a></li>
+                        <li><a href="/products.html">Produse</a></li>
+                        <li><a href="/about.html">Despre Noi</a></li>
+                        <li><a href="/contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <p><i class="fas fa-map-marker-alt"></i> Bulevardul Eleganței 10, București</p>
+                    <p><i class="fas fa-phone"></i> +40 721 000 000</p>
+                    <p><i class="fas fa-envelope"></i> contact@redbyluxury.ro</p>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 Red by Luxury. Toate drepturile rezervate.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Încărcare produse din API
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('/api/products')
+                .then(response => response.json())
+                .then(products => {
+                    const container = document.getElementById('products-container');
+                    container.innerHTML = '';
+                    
+                    products.forEach(product => {
+                        const productCard = document.createElement('div');
+                        productCard.className = 'product-card';
+                        productCard.dataset.id = product.id;
+                        
+                        // Determinare clasă pentru badge
+                        let badgeClass = '';
+                        let badgeText = '';
+                        if (product.badge === 'Reducere') {
+                            badgeClass = 'sale';
+                            badgeText = 'Reducere';
+                        } else if (product.badge === 'Nou') {
+                            badgeClass = 'nou';
+                            badgeText = 'Nou';
+                        }
+                        
+                        productCard.innerHTML = `
+                            <div class="product-badge ${badgeClass}">${badgeText}</div>
+                            <img src="${product.image}" alt="${product.name}">
+                            <div class="product-info">
+                                <h3>${product.name}</h3>
+                                <p>${product.description}</p>
+                                <div class="product-meta">
+                                    <span class="price">${product.price} lei</span>
+                                    <button class="add-to-cart" data-id="${product.id}">Adaugă</button>
+                                </div>
+                            </div>
+                        `;
+                        
+                        container.appendChild(productCard);
+                    });
+                    
+                    // Adăugare event listeners pentru butoanele de adăugare în coș
+                    document.querySelectorAll('.add-to-cart').forEach(button => {
+                        button.addEventListener('click', function() {
+                            const productId = this.dataset.id;
+                            const product = products.find(p => p.id === productId);
+                            
+                            if (product) {
+                                // Creăm obiectul produs cu prețul ca număr
+                                const productObj = {
+                                    id: product.id,
+                                    name: product.name,
+                                    price: product.price,
+                                    image: product.image,
+                                    quantity: 1
+                                };
+                                
+                                // Folosim funcția addToCart din script.js
+                                window.addToCart(productObj);
+                                window.updateCartCount();
+                                
+                                // Animație de feedback
+                                this.textContent = 'Adăugat!';
+                                this.style.backgroundColor = '#4CAF50';
+                                setTimeout(() => {
+                                    this.textContent = 'Adaugă';
+                                    this.style.backgroundColor = '';
+                                }, 1500);
+                            }
+                        });
+                    });
+                });
+        });
+    </script>
+</body>
+</html>

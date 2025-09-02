@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - Red by Luxury</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <h1><a href="/">RED <span>by Luxury</span></a></h1>
+                <p>Parfumuri de Lux</p>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="/">Acasă</a></li>
+                    <li><a href="/products.html">Produse</a></li>
+                    <li><a href="/about.html">Despre Noi</a></li>
+                    <li><a href="/contact.html" class="active">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="header-icons">
+                <a href="/search.html"><i class="fas fa-search"></i></a>
+                <a href="/cart.html" class="cart-icon">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span class="cart-count">0</span>
+                </a>
+                <a href="/account.html"><i class="fas fa-user"></i></a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Contact Section -->
+    <section class="contact-page">
+        <div class="container">
+            <h2>Contactați-ne</h2>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <h3>Informații de Contact</h3>
+                    <div class="contact-detail">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <h4>Adresă</h4>
+                            <p>Bulevardul Eleganței 10, Sector 1, București</p>
+                        </div>
+                    </div>
+                    <div class="contact-detail">
+                        <i class="fas fa-phone"></i>
+                        <div>
+                            <h4>Telefon</h4>
+                            <p>+40 721 000 000</p>
+                        </div>
+                    </div>
+                    <div class="contact-detail">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <h4>Email</h4>
+                            <p>contact@redbyluxury.ro</p>
+                        </div>
+                    </div>
+                    <div class="contact-detail">
+                        <i class="fas fa-clock"></i>
+                        <div>
+                            <h4>Ore de lucru</h4>
+                            <p>Luni - Vineri: 10:00 - 19:00<br>Sâmbătă: 10:00 - 17:00</p>
+                        </div>
+                    </div>
+                    
+                    <div class="social-media">
+                        <h4>Urmăriți-ne</h4>
+                        <div class="social-icons">
+                            <a href="https://www.facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                            <a href="https://www.instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+                            <a href="https://www.pinterest.com" target="_blank"><i class="fab fa-pinterest-p"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="contact-form">
+                    <h3>Trimiteți-ne un mesaj</h3>
+                    <!-- Înlocuiește FORMSPREE_ENDPOINT cu endpoint-ul tău de la Formspree -->
+                    <form id="contactForm" action="https://formspree.io/f/xwpnnaze" method="POST">
+                        <div class="form-group">
+                            <label for="name">Nume complet *</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Email *</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="subject">Subiect *</label>
+                            <input type="text" id="subject" name="subject" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="message">Mesaj *</label>
+                            <textarea id="message" name="message" rows="5" required></textarea>
+                        </div>
+                        
+                        <!-- Câmp ascuns pentru redirect după trimitere -->
+                        <input type="hidden" name="_next" value="http://localhost:4242/contact.html?success=true">
+                        <input type="hidden" name="_subject" value="Mesaj nou de contact de la Red by Luxury">
+                        <input type="text" name="_gotcha" style="display:none">
+                        
+                        <button type="submit" class="btn-primary">Trimite Mesajul</button>
+                        <div id="formMessage" class="form-message"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Map Section -->
+    <section class="map-section">
+        <div class="container">
+            <h3>Găsiți-ne</h3>
+            <div class="map-container">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2848.844115920892!2d26.10274431552858!3d44.43569197910171!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40b1ff4770adb5b7%3A0x58147f39579fe674!2sBulevardul%20Elegan%C8%9Bei%2010%2C%20Bucure%C8%99ti!5e0!3m2!1sro!2sro!4v1650000000000!5m2!1sro!2sro" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>RED <span>by Luxury</span></h3>
+                    <p>Parfumuri de lux create pentru oameni excepționali</p>
+                    <div class="social-icons">
+                        <a href="https://www.facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.pinterest.com" target="_blank"><i class="fab fa-pinterest-p"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Linkuri Utile</h4>
+                    <ul>
+                        <li><a href="/">Acasă</a></li>
+                        <li><a href="/products.html">Produse</a></li>
+                        <li><a href="/about.html">Despre Noi</a></li>
+                        <li><a href="/contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <p><i class="fas fa-map-marker-alt"></i> Bulevardul Eleganței 10, București</p>
+                    <p><i class="fas fa-phone"></i> +40 721 000 000</p>
+                    <p><i class="fas fa-envelope"></i> contact@redbyluxury.ro</p>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 Red by Luxury. Toate drepturile rezervate.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Funcționalitate formular de contact
+        document.addEventListener('DOMContentLoaded', function() {
+            const contactForm = document.getElementById('contactForm');
+            const formMessage = document.getElementById('formMessage');
+            
+            // Verifică dacă formularul a fost trimis cu succes
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('success')) {
+                formMessage.innerHTML = '<div class="success-message">Mesajul a fost trimis cu succes! Vă vom contacta în curând.</div>';
+                history.replaceState({}, document.title, "/contact.html");
+            }
+            
+            contactForm.addEventListener('submit', function(e) {
+                // Nu prevenim comportamentul implicit pentru Formspree
+                // Formspree va trimite formularul automat
+            });
+        });
+    </script>
+</body>
+</html>

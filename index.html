@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Red by Luxury - Parfumuri de Lux</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <h1><a href="/">RED <span>by Luxury</span></a></h1>
+                <p>Parfumuri de Lux</p>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="/" class="active">Acasă</a></li>
+                    <li><a href="/products.html">Produse</a></li>
+                    <li><a href="/about.html">Despre Noi</a></li>
+                    <li><a href="/contact.html">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="header-icons">
+                <a href="/search.html"><i class="fas fa-search"></i></a>
+                <a href="/cart.html" class="cart-icon">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span class="cart-count">0</span>
+                </a>
+                <a href="/account.html"><i class="fas fa-user"></i></a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h2>Esenta Luxului</h2>
+            <p>Descoperă colecția noastră exclusivă de parfumuri de lux</p>
+            <a href="/products.html" class="btn-primary">Descoperă Colecția</a>
+        </div>
+        <div class="hero-overlay"></div>
+    </section>
+
+    <!-- Featured Products Carousel -->
+    <section class="featured-products">
+        <div class="container">
+            <h2>Colecția Red by Luxury</h2>
+            <div class="carousel-container">
+                <div class="carousel">
+                    <!-- Group 1 -->
+                    <div class="carousel-slide">
+                        <div class="product-card" data-id="prod_LX1">
+                            <div class="product-badge">Nou</div>
+                            <img src="https://res.cloudinary.com/dkdzz4btm/image/upload/v1756822714/3f2e08bd-9ce1-4225-ad64-c90427b8e4b8_fhlv2v.jpg" alt="Red Signature">
+                            <div class="product-info">
+                                <h3>Red Signature</h3>
+                                <p>O combinație rafinată de vanilie, oud și ambroxan</p>
+                                <div class="product-meta">
+                                    <span class="price">499 lei</span>
+                                    <button class="add-to-cart" data-id="prod_LX1">Adaugă</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="product-card" data-id="prod_LX2">
+                            <div class="product-badge sale">Reducere</div>
+                            <img src="https://res.cloudinary.com/dkdzz4btm/image/upload/v1756822713/52527b57-1f7c-43bb-9adf-c703c8ab20bc_zmbiox.jpg" alt="Red Noir">
+                            <div class="product-info">
+                                <h3>Red Noir</h3>
+                                <p>Jasmine, ylang-ylang și un strop de lămâie verde</p>
+                                <div class="product-meta">
+                                    <span class="price">449 lei</span>
+                                    <button class="add-to-cart" data-id="prod_LX2">Adaugă</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="product-card" data-id="prod_LX3">
+                            <img src="https://res.cloudinary.com/dkdzz4btm/image/upload/v1756822713/25ad17a8-cccc-49d3-af60-eaaf69ea075a_z7ngrr.jpg" alt="Red Oriental">
+                            <div class="product-info">
+                                <h3>Red Oriental</h3>
+                                <p>Cu note de cardamom, santal și mosc alb</p>
+                                <div class="product-meta">
+                                    <span class="price">529 lei</span>
+                                    <button class="add-to-cart" data-id="prod_LX3">Adaugă</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Group 2 -->
+                    <div class="carousel-slide">
+                        <div class="product-card" data-id="prod_LX4">
+                            <img src="https://res.cloudinary.com/dkdzz4btm/image/upload/v1756822713/7bf209e6-0b00-4d44-9fac-8d193bc7fc54_vvu6bf.jpg" alt="Red Citrus">
+                            <div class="product-info">
+                                <h3>Red Citrus</h3>
+                                <p>Bergamotă, grapefruit și mentă verde</p>
+                                <div class="product-meta">
+                                    <span class="price">399 lei</span>
+                                    <button class="add-to-cart" data-id="prod_LX4">Adaugă</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="product-card" data-id="prod_LX5">
+                            <div class="product-badge">Nou</div>
+                            <img src="https://res.cloudinary.com/dkdzz4btm/image/upload/v1756822713/57c5df8b-e31d-4c67-a9fa-34f5a1dc8b61_hgdndh.jpg" alt="Red Rosa">
+                            <div class="product-info">
+                                <h3>Red Rosa</h3>
+                                <p>Roză de Damasc, mosc și vanilie bourbon</p>
+                                <div class="product-meta">
+                                    <span class="price">479 lei</span>
+                                    <button class="add-to-cart" data-id="prod_LX5">Adaugă</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="product-card" data-id="prod_LX6">
+                            <div class="product-badge sale">Reducere</div>
+                            <img src="https://res.cloudinary.com/dkdzz4btm/image/upload/v1756822713/52527b57-1f7c-43bb-9adf-c703c8ab20bc_zmbiox.jpg" alt="Red Woods">
+                            <div class="product-info">
+                                <h3>Red Woods</h3>
+                                <p>Cedru, vetiver și un strop de lavandă</p>
+                                <div class="product-meta">
+                                    <span class="price">429 lei</span>
+                                    <button class="add-to-cart" data-id="prod_LX6">Adaugă</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Group 3 -->
+                    <div class="carousel-slide">
+                        <div class="product-card" data-id="prod_LX7">
+                            <div class="product-badge">Nou</div>
+                            <img src="https://res.cloudinary.com/dkdzz4btm/image/upload/v1756822714/3f2e08bd-9ce1-4225-ad64-c90427b8e4b8_fhlv2v.jpg" alt="Red Amber">
+                            <div class="product-info">
+                                <h3>Red Amber</h3>
+                                <p>Ambră, benjuin și tămâie</p>
+                                <div class="product-meta">
+                                    <span class="price">549 lei</span>
+                                    <button class="add-to-cart" data-id="prod_LX7">Adaugă</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="product-card" data-id="prod_LX8">
+                            <img src="https://res.cloudinary.com/dkdzz4btm/image/upload/v1756822713/25ad17a8-cccc-49d3-af60-eaaf69ea075a_z7ngrr.jpg" alt="Red Musk">
+                            <div class="product-info">
+                                <h3>Red Musk</h3>
+                                <p>Mosc alb, vanilie și lemn de santal</p>
+                                <div class="product-meta">
+                                    <span class="price">469 lei</span>
+                                    <button class="add-to-cart" data-id="prod_LX8">Adaugă</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="product-card" data-id="prod_LX9">
+                            <div class="product-badge sale">Reducere</div>
+                            <img src="https://res.cloudinary.com/dkdzz4btm/image/upload/v1756822713/57c5df8b-e31d-4c67-a9fa-34f5a1dc8b61_hgdndh.jpg" alt="Red Gardenia">
+                            <div class="product-info">
+                                <h3>Red Gardenia</h3>
+                                <p>Gardenia, ylang-ylang și fructe tropicale</p>
+                                <div class="product-meta">
+                                    <span class="price">439 lei</span>
+                                    <button class="add-to-cart" data-id="prod_LX9">Adaugă</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Group 4 -->
+                    <div class="carousel-slide">
+                        <div class="product-card" data-id="prod_LX10">
+                            <img src="https://res.cloudinary.com/dkdzz4btm/image/upload/v1756822713/7bf209e6-0b00-4d44-9fac-8d193bc7fc54_vvu6bf.jpg" alt="Red Oud">
+                            <div class="product-info">
+                                <h3>Red Oud</h3>
+                                <p>Oud, cardamom și scorțișoară</p>
+                                <div class="product-meta">
+                                    <span class="price">599 lei</span>
+                                    <button class="add-to-cart" data-id="prod_LX10">Adaugă</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="product-card" data-id="prod_LX11">
+                            <div class="product-badge">Nou</div>
+                            <img src="https://res.cloudinary.com/dkdzz4btm/image/upload/v1756822713/52527b57-1f7c-43bb-9adf-c703c8ab20bc_zmbiox.jpg" alt="Red Vetiver">
+                            <div class="product-info">
+                                <h3>Red Vetiver</h3>
+                                <p>Vetiver, lămâie și mușețel</p>
+                                <div class="product-meta">
+                                    <span class="price">489 lei</span>
+                                    <button class="add-to-cart" data-id="prod_LX11">Adaugă</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="product-card" data-id="prod_LX12">
+                            <div class="product-badge sale">Reducere</div>
+                            <img src="https://res.cloudinary.com/dkdzz4btm/image/upload/v1756822714/3f2e08bd-9ce1-4225-ad64-c90427b8e4b8_fhlv2v.jpg" alt="Red Jasmine">
+                            <div class="product-info">
+                                <h3>Red Jasmine</h3>
+                                <p>Jasmine sambac, bergamotă și mosc</p>
+                                <div class="product-meta">
+                                    <span class="price">459 lei</span>
+                                    <button class="add-to-cart" data-id="prod_LX12">Adaugă</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-btn prev-btn"><i class="fas fa-chevron-left"></i></button>
+                <button class="carousel-btn next-btn"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about-section">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>Despre Red by Luxury</h2>
+                    <p>Red by Luxury este brandul premium de parfumuri care redefinește eleganța modernă. Fiecare parfum din colecția noastră este creat cu ingrediente de cea mai înaltă calitate și inspirat din cele mai rafinate fragranțe ale lumii.</p>
+                    <p>Fondată în 2018 de maestrul parfumier internațional, Elena Red, marca noastră aduce o nouă dimensiune a luxului în lumea parfumeriei.</p>
+                    <div class="features">
+                        <div class="feature">
+                            <i class="fas fa-flask"></i>
+                            <h3>Ingrediente Premium</h3>
+                            <p>Doar cele mai bune ingrediente naturale</p>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-crown"></i>
+                            <h3>Exclusivitate</h3>
+                            <p>Colecții limitate pentru colecționari</p>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-gift"></i>
+                            <h3>Ambalaj Elegant</h3>
+                            <p>Fiecare sticlă este o lucrare de artă</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-image">
+                    <img src="https://images.unsplash.com/photo-1590642916589-592bca10dfbf?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Atelierul Red by Luxury">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="newsletter">
+        <div class="container">
+            <h2>Abonează-te pentru Oferte Exclusive</h2>
+            <p>Fii primul care află despre lansările noastre și ofertele speciale</p>
+            <form class="newsletter-form">
+                <input type="email" placeholder="Adresa ta de email" required>
+                <button type="submit" class="btn-primary">Abonează-te</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>RED <span>by Luxury</span></h3>
+                    <p>Parfumuri de lux create pentru oameni excepționali</p>
+                    <div class="social-icons">
+                        <a href="https://www.facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.pinterest.com" target="_blank"><i class="fab fa-pinterest-p"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Linkuri Utile</h4>
+                    <ul>
+                        <li><a href="/">Acasă</a></li>
+                        <li><a href="/products.html">Produse</a></li>
+                        <li><a href="/about.html">Despre Noi</a></li>
+                        <li><a href="/contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <p><i class="fas fa-map-marker-alt"></i> Bulevardul Eleganței 10, București</p>
+                    <p><i class="fas fa-phone"></i> +40 721 000 000</p>
+                    <p><i class="fas fa-envelope"></i> contact@redbyluxury.ro</p>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 Red by Luxury. Toate drepturile rezervate.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
