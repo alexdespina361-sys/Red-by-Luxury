@@ -52,8 +52,9 @@
             <h2>Colecția Red by Luxury</h2>
             <div class="carousel-container">
                 <div class="carousel">
-                    <!-- Product 1 -->
+                    <!-- Slide 1: Contains the first 3 products -->
                     <div class="carousel-slide">
+                        <!-- Product 1 -->
                         <div class="product-card" data-id="prod_LX1">
                             <div class="product-badge">Nou</div>
                             <img src="https://res.cloudinary.com/dkdzz4btm/image/upload/v1756822714/3f2e08bd-9ce1-4225-ad64-c90427b8e4b8_fhlv2v.jpg" alt="Red Signature">
@@ -66,10 +67,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    
-                    <!-- Product 2 -->
-                    <div class="carousel-slide">
+                        <!-- Product 2 -->
                         <div class="product-card" data-id="prod_LX2">
                             <div class="product-badge sale">Reducere</div>
                             <img src="https://res.cloudinary.com/dkdzz4btm/image/upload/v1756822713/52527b57-1f7c-43bb-9adf-c703c8ab20bc_zmbiox.jpg" alt="Red Noir">
@@ -82,10 +80,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    
-                    <!-- Product 3 -->
-                    <div class="carousel-slide">
+                        <!-- Product 3 -->
                         <div class="product-card" data-id="prod_LX3">
                             <img src="https://res.cloudinary.com/dkdzz4btm/image/upload/v1756822713/25ad17a8-cccc-49d3-af60-eaaf69ea075a_z7ngrr.jpg" alt="Red Oriental">
                             <div class="product-info">
@@ -98,9 +93,10 @@
                             </div>
                         </div>
                     </div>
-                    
-                    <!-- Product 4 -->
+
+                    <!-- Slide 2: Contains the next 3 products -->
                     <div class="carousel-slide">
+                        <!-- Product 4 -->
                         <div class="product-card" data-id="prod_LX4">
                             <img src="https://res.cloudinary.com/dkdzz4btm/image/upload/v1756822713/7bf209e6-0b00-4d44-9fac-8d193bc7fc54_vvu6bf.jpg" alt="Red Citrus">
                             <div class="product-info">
@@ -112,10 +108,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    
-                    <!-- Product 5 -->
-                    <div class="carousel-slide">
+                        <!-- Product 5 -->
                         <div class="product-card" data-id="prod_LX5">
                             <div class="product-badge">Nou</div>
                             <img src="https://res.cloudinary.com/dkdzz4btm/image/upload/v1756822713/57c5df8b-e31d-4c67-a9fa-34f5a1dc8b61_hgdndh.jpg" alt="Red Rosa">
@@ -128,10 +121,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    
-                    <!-- Product 6 -->
-                    <div class="carousel-slide">
+                        <!-- Product 6 -->
                         <div class="product-card" data-id="prod_LX6">
                             <div class="product-badge sale">Reducere</div>
                             <img src="https://res.cloudinary.com/dkdzz4btm/image/upload/v1756822713/52527b57-1f7c-43bb-9adf-c703c8ab20bc_zmbiox.jpg" alt="Red Woods">
@@ -232,121 +222,49 @@
         </div>
     </footer>
 
+    <!-- NEW SIMPLIFIED SCRIPT -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const carousel = document.querySelector('.carousel');
+            const slides = document.querySelectorAll('.carousel-slide');
             const prevBtn = document.querySelector('.prev-btn');
             const nextBtn = document.querySelector('.next-btn');
-            
-            if (!carousel) return;
 
-            const slides = Array.from(carousel.querySelectorAll('.carousel-slide'));
-            const totalItems = slides.length;
-            
-            if (totalItems === 0) return;
+            if (!carousel || slides.length === 0) return;
 
-            let slidesPerView = getSlidesPerView();
             let currentIndex = 0;
-            let autoplayInterval = null;
-            const AUTOPLAY_MS = 4000;
-            const MOVE_BY_PAGE = true; // true => advance pages (1/2/3), false => advance 1 item
+            const totalSlides = slides.length;
 
-            function getSlidesPerView() {
-                if (window.innerWidth <= 768) return 1;
-                if (window.innerWidth <= 1024) return 2;
-                return 3;
+            function updateCarousel() {
+                const offset = -currentIndex * 100;
+                carousel.style.transform = `translateX(${offset}%)`;
             }
 
-            // This function *forces* slide widths to be exactly (100 / slidesPerView)%
-            function applySlideWidths() {
-                slidesPerView = getSlidesPerView();
-                const percent = 100 / slidesPerView;
-                slides.forEach(s => {
-                    s.style.flex = `0 0 ${percent}%`;
-                    s.style.maxWidth = `${percent}%`;
-                });
+            function showNextSlide() {
+                currentIndex = (currentIndex + 1) % totalSlides;
+                updateCarousel();
             }
 
-            function updateTransform() {
-                // Use carousel.clientWidth so JS aligns with the actual visible width
-                const viewport = carousel.clientWidth;
-                const itemWidth = viewport / slidesPerView;
-                // clamp start index so last page doesn't overshoot
-                const maxStart = Math.max(0, totalItems - slidesPerView);
-                const startIndex = Math.min(currentIndex, maxStart);
-                const px = startIndex * itemWidth;
-                carousel.style.transform = `translateX(-${px}px)`;
+            function showPrevSlide() {
+                currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+                updateCarousel();
             }
 
-            function next() {
-                if (MOVE_BY_PAGE) currentIndex += slidesPerView;
-                else currentIndex += 1;
-                // wrap-around
-                if (currentIndex > totalItems - 1) currentIndex = 0;
-                updateTransform();
+            if (nextBtn) {
+                nextBtn.addEventListener('click', showNextSlide);
             }
 
-            function prev() {
-                if (MOVE_BY_PAGE) currentIndex -= slidesPerView;
-                else currentIndex -= 1;
-                if (currentIndex < 0) currentIndex = Math.max(0, totalItems - slidesPerView);
-                updateTransform();
+            if (prevBtn) {
+                prevBtn.addEventListener('click', showPrevSlide);
             }
 
-            function startAutoplay() {
-                stopAutoplay();
-                if (totalItems > slidesPerView) autoplayInterval = setInterval(next, AUTOPLAY_MS);
-            }
-            
-            function stopAutoplay() { 
-                if (autoplayInterval) { 
-                    clearInterval(autoplayInterval); 
-                    autoplayInterval = null; 
-                } 
-            }
+            // Optional: Autoplay
+            let autoplayInterval = setInterval(showNextSlide, 5000);
 
-            // Attach controls
-            if (prevBtn) prevBtn.addEventListener('click', () => { 
-                prev(); 
-                startAutoplay(); 
-            });
-            
-            if (nextBtn) nextBtn.addEventListener('click', () => { 
-                next(); 
-                startAutoplay(); 
-            });
-            
-            carousel.addEventListener('mouseenter', stopAutoplay);
-            carousel.addEventListener('mouseleave', startAutoplay);
-
-            // Handle resize: reapply widths and keep sensible currentIndex
-            let resizeTimer = null;
-            window.addEventListener('resize', () => {
-                if (resizeTimer) clearTimeout(resizeTimer);
-                resizeTimer = setTimeout(() => {
-                    const oldSpv = slidesPerView;
-                    applySlideWidths();
-                    // keep visible position when spv changes
-                    if (oldSpv !== slidesPerView) {
-                        currentIndex = Math.floor(currentIndex / oldSpv) * slidesPerView;
-                    }
-                    updateTransform();
-                    startAutoplay();
-                }, 120);
-            });
-
-            // Init
-            applySlideWidths();
-            // give images/fonts one frame to layout
-            window.requestAnimationFrame(() => { 
-                updateTransform(); 
-                startAutoplay(); 
-            });
-            
-            window.addEventListener('load', () => { 
-                applySlideWidths(); 
-                updateTransform(); 
-            });
+            // Pause autoplay on hover
+            const container = document.querySelector('.carousel-container');
+            container.addEventListener('mouseenter', () => clearInterval(autoplayInterval));
+            container.addEventListener('mouseleave', () => autoplayInterval = setInterval(showNextSlide, 5000));
         });
     </script>
 </body>
