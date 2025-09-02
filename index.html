@@ -313,11 +313,9 @@
   const nextBtn = document.querySelector('.next-btn');
   if (!carousel) return;
 
-  // Move mode: true = page-by-page, false = 1-item step
-  const MOVE_BY_PAGE = true;
-
-  // --- build slides if needed (works with grouped HTML) ---
+  // If your HTML groups all product-cards into one slide, unwrap them into single slides
   const productCards = Array.from(carousel.querySelectorAll('.product-card'));
+  if (productCards.length === 0) return;
   carousel.innerHTML = '';
   productCards.forEach(card => {
     const slide = document.createElement('div');
@@ -330,11 +328,10 @@
   const totalItems = slides.length;
 
   let slidesPerView = getSlidesPerView();
-  let pageCount = Math.ceil(totalItems / slidesPerView);
-  let currentPage = 0;   // page index for MOVE_BY_PAGE
-  let currentIndex = 0;  // item index for slide-by-slide
+  let currentIndex = 0;
   let autoplayInterval = null;
   const AUTOPLAY_MS = 4000;
+  const MOVE_BY_PAGE = true; // true => advance pages (1/2/3), false => advance 1 item
 
   function getSlidesPerView() {
     if (window.innerWidth <= 768) return 1;
@@ -342,107 +339,83 @@
     return 3;
   }
 
-  function updateLayoutVars() {
+  // This function *forces* slide widths to be exactly (100 / slidesPerView)%
+  function applySlideWidths() {
     slidesPerView = getSlidesPerView();
-    pageCount = Math.ceil(totalItems / slidesPerView);
-    // Clamp indexes
-    currentPage = Math.max(0, Math.min(currentPage, pageCount - 1));
-    currentIndex = Math.max(0, Math.min(currentIndex, Math.max(0, totalItems - 1)));
-  }
-
-  function translateByPixels(px) {
-    carousel.style.transform = `translateX(-${px}px)`;
+    const percent = 100 / slidesPerView;
+    slides.forEach(s => {
+      s.style.flex = `0 0 ${percent}%`;
+      s.style.maxWidth = `${percent}%`;
+    });
   }
 
   function updateTransform() {
-    const viewportWidth = carousel.parentElement.clientWidth; // visible track width
-    if (MOVE_BY_PAGE) {
-      // Full-page translation
-      const px = currentPage * viewportWidth;
-      translateByPixels(px);
-    } else {
-      // Slide-by-slide: compute item width as viewport / slidesPerView
-      const itemWidth = viewportWidth / slidesPerView;
-      // Ensure we don't overflow beyond last full page (clamp currentIndex so last visible item aligns)
-      const maxStartIndex = Math.max(0, totalItems - slidesPerView);
-      const startIndex = Math.min(currentIndex, maxStartIndex);
-      const px = startIndex * itemWidth;
-      translateByPixels(px);
-    }
+    // Use carousel.clientWidth so JS aligns with the actual visible width
+    const viewport = carousel.clientWidth;
+    const itemWidth = viewport / slidesPerView;
+    // clamp start index so last page doesn't overshoot
+    const maxStart = Math.max(0, totalItems - slidesPerView);
+    const startIndex = Math.min(currentIndex, maxStart);
+    const px = startIndex * itemWidth;
+    carousel.style.transform = `translateX(-${px}px)`;
+
+    // debug logs (remove when happy)
+    console.log('viewport', viewport, 'slidesPerView', slidesPerView,
+                'itemWidth', itemWidth, 'currentIndex', currentIndex,
+                'startIndex', startIndex, 'translatePx', px,
+                'computed flex-basis', getComputedStyle(slides[0]).flexBasis);
   }
 
-  // Move handlers
   function next() {
-    if (MOVE_BY_PAGE) {
-      currentPage = (currentPage + 1) % pageCount;
-    } else {
-      // step by 1
-      currentIndex = Math.min(totalItems - 1, currentIndex + 1);
-      // optional wrap: if you want wrap to 0 when reaching end uncomment:
-      // if (currentIndex >= totalItems) currentIndex = 0;
-    }
+    if (MOVE_BY_PAGE) currentIndex += slidesPerView;
+    else currentIndex += 1;
+    // wrap-around
+    if (currentIndex > totalItems - 1) currentIndex = 0;
     updateTransform();
   }
 
   function prev() {
-    if (MOVE_BY_PAGE) {
-      currentPage = (currentPage - 1 + pageCount) % pageCount;
-    } else {
-      currentIndex = Math.max(0, currentIndex - 1);
-      // optional wrap: if you want wrap to last uncomment:
-      // if (currentIndex < 0) currentIndex = totalItems - 1;
-    }
+    if (MOVE_BY_PAGE) currentIndex -= slidesPerView;
+    else currentIndex -= 1;
+    if (currentIndex < 0) currentIndex = Math.max(0, totalItems - slidesPerView);
     updateTransform();
   }
 
-  // Autoplay control (single interval)
   function startAutoplay() {
     stopAutoplay();
-    if ((MOVE_BY_PAGE && pageCount > 1) || (!MOVE_BY_PAGE && totalItems > slidesPerView)) {
-      autoplayInterval = setInterval(next, AUTOPLAY_MS);
-    }
+    if (totalItems > slidesPerView) autoplayInterval = setInterval(next, AUTOPLAY_MS);
   }
-  function stopAutoplay() {
-    if (autoplayInterval) { clearInterval(autoplayInterval); autoplayInterval = null; }
-  }
+  function stopAutoplay() { if (autoplayInterval) { clearInterval(autoplayInterval); autoplayInterval = null; } }
 
-  // Attach UI
+  // Attach controls
   if (prevBtn) prevBtn.addEventListener('click', () => { prev(); startAutoplay(); });
   if (nextBtn) nextBtn.addEventListener('click', () => { next(); startAutoplay(); });
   carousel.addEventListener('mouseenter', stopAutoplay);
   carousel.addEventListener('mouseleave', startAutoplay);
 
-  // Resize: recompute slidesPerView and keep sensible position
+  // Handle resize: reapply widths and keep sensible currentIndex
   let resizeTimer = null;
   window.addEventListener('resize', () => {
     if (resizeTimer) clearTimeout(resizeTimer);
     resizeTimer = setTimeout(() => {
       const oldSpv = slidesPerView;
-      updateLayoutVars();
-      if (MOVE_BY_PAGE && slidesPerView !== oldSpv) {
-        // convert currentPage so we show closest page
-        currentPage = Math.floor((currentPage * oldSpv) / slidesPerView);
-        currentPage = Math.max(0, Math.min(currentPage, pageCount - 1));
-      } else if (!MOVE_BY_PAGE && slidesPerView !== oldSpv) {
-        // keep the same starting item as much as possible
-        currentIndex = Math.min(currentIndex, Math.max(0, totalItems - 1));
+      applySlideWidths();
+      // keep visible position when spv changes
+      if (oldSpv !== slidesPerView) {
+        currentIndex = Math.floor(currentIndex / oldSpv) * slidesPerView;
       }
       updateTransform();
       startAutoplay();
     }, 120);
   });
 
-  // initial layout
-  updateLayoutVars();
-  // ensure transforms calculate after fonts/images/layout done
-  window.requestAnimationFrame(() => {
-    updateTransform();
-    startAutoplay();
-  });
-
-  // recalc after images loaded (sometimes layout changes)
-  window.addEventListener('load', () => { updateLayoutVars(); updateTransform(); });
+  // Init
+  applySlideWidths();
+  // give images/fonts one frame to layout
+  window.requestAnimationFrame(() => { updateTransform(); startAutoplay(); });
+  window.addEventListener('load', () => { applySlideWidths(); updateTransform(); });
 });
+
 
 
     </script>
