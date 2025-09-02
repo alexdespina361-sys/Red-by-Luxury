@@ -14,7 +14,7 @@
     <header>
         <div class="header-container">
             <div class="logo">
-                <h1><a href="/">RED <span>by Luxury</span></a></h1>
+                <h1><a href="/Red-by-Luxury/">RED <span>by Luxury</span></a></h1>
                 <p>Parfumuri de Lux</p>
             </div>
             <nav>
@@ -42,6 +42,7 @@
             <h2>Toate Produsele</h2>
             <div class="product-grid" id="products-container">
                 <!-- Produsele vor fi încărcate dinamic -->
+                <div class="loading">Încărcare produse...</div>
             </div>
         </div>
     </section>
@@ -83,14 +84,26 @@
 
     <script src="script.js"></script>
     <script>
-        // Încărcare produse din API
+        // Încărcare produse din fișierul JSON
         document.addEventListener('DOMContentLoaded', function() {
-            fetch('/api/products')
-                .then(response => response.json())
+            const container = document.getElementById('products-container');
+            
+            // Afișăm un mesaj de încărcare
+            container.innerHTML = '<div class="loading">Încărcare produse...</div>';
+            
+            // Încărcăm produsele din fișierul JSON
+            fetch('/Red-by-Luxury/database/products.json')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
                 .then(products => {
-                    const container = document.getElementById('products-container');
+                    // Ștergem mesajul de încărcare
                     container.innerHTML = '';
                     
+                    // Adăugăm fiecare produs în grilă
                     products.forEach(product => {
                         const productCard = document.createElement('div');
                         productCard.className = 'product-card';
@@ -153,6 +166,10 @@
                             }
                         });
                     });
+                })
+                .catch(error => {
+                    console.error('Error loading products:', error);
+                    container.innerHTML = '<div class="error">Eroare la încărcarea produselor. Vă rugăm încercați mai târziu.</div>';
                 });
         });
     </script>
