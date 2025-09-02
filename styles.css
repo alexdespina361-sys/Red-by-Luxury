@@ -1099,6 +1099,15 @@ footer {
 }
 
 /* Each slide is a flex item. We set flex-basis per breakpoint so multiple slides can be visible */
+/* container + track */
+.carousel-container { overflow: hidden; }
+.carousel {
+  display: flex;
+  transition: transform 0.45s ease;
+  will-change: transform;
+}
+
+/* Each slide is a flex item. We set flex-basis per breakpoint so multiple slides can be visible */
 .carousel-slide {
   box-sizing: border-box;
   padding: 10px;
