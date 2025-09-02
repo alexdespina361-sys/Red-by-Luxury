@@ -1100,46 +1100,21 @@ footer {
 
 /* Each slide is a flex item. We set flex-basis per breakpoint so multiple slides can be visible */
 /* --- Carousel core --- */
-.carousel-container { overflow: hidden; position: relative; }
-.carousel {
-  display: flex;
-  transition: transform 0.45s ease;
-  will-change: transform;
-  align-items: stretch;
-}
-
-/* Each slide is one product (flex item) */
-.carousel-slide {
-  box-sizing: border-box;
-  padding: 10px;
-  flex: 0 0 100%; /* default: 1 per view */
-  display: flex;
-  justify-content: center;
-}
-/* make sure padding and borders are included in widths */
-.carousel, .carousel-slide, .product-card { box-sizing: border-box; }
-
-/* ensure .carousel is exactly the viewport area for the slides */
+/* baseline */
 .carousel-container { overflow: hidden; width: 100%; }
-.carousel { display: flex; transition: transform .45s ease; }
+.carousel { display: flex; transition: transform .45s ease; width: 100%; box-sizing: border-box; }
 
-/* Desktop: 3 products visible */
-@media (min-width: 1025px) {
-  .carousel-slide { flex: 0 0 33.333333%; }
-  .carousel-slide .product-card { width: 95%; max-width: 420px; }
-}
+/* default: 1 per view */
+.carousel-slide { box-sizing: border-box; padding: 10px; display: flex; justify-content: center; flex: 0 0 100%; }
 
-/* Tablet: 2 products visible */
-@media (min-width: 769px) and (max-width: 1024px) {
-  .carousel-slide { flex: 0 0 50%; }
-  .carousel-slide .product-card { width: 95%; max-width: 560px; }
-}
+/* product card baseline */
+.product-card { box-sizing: border-box; width: 100%; max-width: none; }
 
-/* Mobile: 1 product visible */
-@media (max-width: 768px) {
-  .carousel-slide { flex: 0 0 100%; }
-  .carousel-slide .product-card { width: 90%; margin: 10px auto; }
-}
+/* Desktop: CSS fallback only (JS will enforce exact widths) */
+@media (min-width: 1025px) { .carousel-slide { flex-basis: 33.3333%; } }
+@media (min-width: 769px) and (max-width: 1024px) { .carousel-slide { flex-basis: 50%; } }
+@media (max-width: 768px) { .carousel-slide { flex-basis: 100%; } }
+
 
 /* Product card baseline (tweak to taste) */
 .product-card {
