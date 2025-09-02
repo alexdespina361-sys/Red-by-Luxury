@@ -811,7 +811,7 @@ nav ul li a.active::after {
 /* Newsletter */
 .newsletter {
     padding: 80px 0;
-    background: linear-gradient(rgba(183, 28, 28, 0.9), rgba(183, 28, 28, 0.9)), url('https://images.unsplash.com/photo-1523293182086-7651a899d37f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+    background: linear-gradient(rgba(183, 28, 28, 0.9), rgba(183, 28, 28, 0.9)), url('  https://images.unsplash.com/photo-1523293182086-7651a899d37f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
     background-size: cover;
     background-position: center;
     text-align: center;
@@ -1077,7 +1077,6 @@ footer {
         width: 100%;
     }
     
-    /* MODIFIED: Ensure product grid is single column on small phones */
     .product-grid {
         grid-template-columns: 1fr;
     }
@@ -1096,53 +1095,50 @@ footer {
 }
 
 /* Responsive carousel */
+
+/* Base style for a slide - remains full-width by default for mobile-first compatibility */
 .carousel-slide {
     min-width: 100%;
     display: flex;
     justify-content: center;
+    /* Add padding here to ensure spacing is consistent */
+    padding: 0 10px;
 }
+
 
 /* Mobile: 1 product per slide */
 @media (max-width: 768px) {
     .carousel-slide .product-card {
         width: 90%;
-        margin: 10px auto;
-    }
-    
-    .carousel-slide {
-        flex-direction: column;
-        align-items: center;
+        margin: 0 auto; /* Center the single card */
     }
 }
 
 /* Tablet: 2 products per slide */
 @media (min-width: 769px) and (max-width: 1024px) {
     .carousel-slide {
-        flex-direction: row;
-        justify-content: center;
-        flex-wrap: wrap;
-    }
-    
-    .carousel-slide .product-card {
-        width: 45%;
-        margin: 10px;
+        /* On tablets, each slide takes up half the container width */
+        min-width: 50%;
     }
 }
 
-/* MODIFIED: Desktop: 3 products per slide */
+/* Desktop: 3 products per slide */
 @media (min-width: 1025px) {
+    /* Widen the container to give products more space */
+    .carousel-container {
+        max-width: 1200px;
+    }
+
     .carousel-slide {
-        display: flex;
-        justify-content: space-around; /* Use space-around for better spacing */
+        /* On desktops, each slide takes up a third of the container width */
+        min-width: calc(100% / 3);
     }
     
     .carousel-slide .product-card {
-        /* Use calc() to ensure 3 products fit perfectly with margins */
-        width: calc(33.333% - 20px);
-        margin: 10px;
+        width: 100%; /* The card should fill its slide container */
+        margin: 0;
     }
 }
-
 
 /* Product card adjustments for mobile */
 @media (max-width: 768px) {
