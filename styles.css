@@ -201,7 +201,7 @@ nav ul li a.active::after {
     box-shadow: 0 6px 15px rgba(0,0,0,0.3);
 }
 
-/* Featured Products Carousel */
+/* --- CORRECTED CAROUSEL STYLES --- */
 .featured-products {
     padding: 80px 0;
     background-color: var(--white);
@@ -229,7 +229,7 @@ nav ul li a.active::after {
 
 .carousel-container {
     position: relative;
-    max-width: 1000px;
+    max-width: 1200px; /* Widened to better fit 3 items */
     margin: 0 auto;
     overflow: hidden;
 }
@@ -240,9 +240,10 @@ nav ul li a.active::after {
 }
 
 .carousel-slide {
-    min-width: 100%;
-    display: flex;
-    justify-content: center;
+    /* JavaScript will control the flex-basis and max-width. */
+    /* This padding ensures items don't touch each other. */
+    padding: 0 10px;
+    box-sizing: border-box;
 }
 
 .product-card {
@@ -254,8 +255,27 @@ nav ul li a.active::after {
     position: relative;
     overflow: hidden;
     box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-    width: 300px;
+    /* Changed from fixed width to 100% to fill the slide container */
+    width: 100%; 
+    /* Added to ensure cards have equal height and buttons align */
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
+
+.product-info {
+    /* Added to push the button/price to the bottom */
+    flex-grow: 1; 
+    display: flex;
+    flex-direction: column;
+}
+
+.product-meta {
+    /* Added to ensure this section is always at the bottom */
+    margin-top: auto; 
+}
+/* --- END OF CORRECTED STYLES --- */
+
 
 .product-card:hover {
     transform: translateY(-10px);
@@ -1058,6 +1078,8 @@ footer {
     body {
         padding-top: 120px; /* Adjust based on header height */
     }
+    
+    /* We no longer need specific carousel responsive rules here, JS handles it */
 }
 
 @media (max-width: 576px) {
@@ -1073,9 +1095,10 @@ footer {
         padding: 12px 30px;
     }
     
-    .product-card {
+    /* This rule is no longer needed for the carousel card, JS handles it. */
+    /* .product-card {
         width: 100%;
-    }
+    } */
     
     .product-grid {
         grid-template-columns: 1fr;
