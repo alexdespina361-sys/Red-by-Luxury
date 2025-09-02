@@ -313,23 +313,26 @@
   const nextBtn = document.querySelector('.next-btn');
   if (!carousel) return;
 
-  // --- Step 1: ensure each product-card is its own .carousel-slide ---
-  // Collect product cards anywhere inside the carousel (works with your grouped HTML)
+  // Move mode: true = page-by-page, false = 1-item step
+  const MOVE_BY_PAGE = true;
+
+  // --- build slides if needed (works with grouped HTML) ---
   const productCards = Array.from(carousel.querySelectorAll('.product-card'));
-  // Clear carousel and re-create slides one-per-product
   carousel.innerHTML = '';
   productCards.forEach(card => {
     const slide = document.createElement('div');
     slide.className = 'carousel-slide';
-    slide.appendChild(card); // moves element into slide
+    slide.appendChild(card);
     carousel.appendChild(slide);
   });
 
   const slides = Array.from(carousel.querySelectorAll('.carousel-slide'));
-  const slideCount = slides.length;
-  let currentIndex = 0;
+  const totalItems = slides.length;
+
   let slidesPerView = getSlidesPerView();
-  let slideWidth = 0;
+  let pageCount = Math.ceil(totalItems / slidesPerView);
+  let currentPage = 0;   // page index for MOVE_BY_PAGE
+  let currentIndex = 0;  // item index for slide-by-slide
   let autoplayInterval = null;
   const AUTOPLAY_MS = 4000;
 
@@ -339,90 +342,106 @@
     return 3;
   }
 
-  function updateSlideWidth() {
-    // width of one slide (includes padding)
-    slideWidth = slides[0] ? slides[0].getBoundingClientRect().width : 0;
+  function updateLayoutVars() {
+    slidesPerView = getSlidesPerView();
+    pageCount = Math.ceil(totalItems / slidesPerView);
+    // Clamp indexes
+    currentPage = Math.max(0, Math.min(currentPage, pageCount - 1));
+    currentIndex = Math.max(0, Math.min(currentIndex, Math.max(0, totalItems - 1)));
   }
 
-  function maxIndex() {
-    return Math.max(0, slideCount - slidesPerView);
-  }
-
-  function clampIndex(i) {
-    return Math.max(0, Math.min(i, maxIndex()));
+  function translateByPixels(px) {
+    carousel.style.transform = `translateX(-${px}px)`;
   }
 
   function updateTransform() {
-    const translateX = currentIndex * slideWidth;
-    carousel.style.transform = `translateX(-${translateX}px)`;
+    const viewportWidth = carousel.parentElement.clientWidth; // visible track width
+    if (MOVE_BY_PAGE) {
+      // Full-page translation
+      const px = currentPage * viewportWidth;
+      translateByPixels(px);
+    } else {
+      // Slide-by-slide: compute item width as viewport / slidesPerView
+      const itemWidth = viewportWidth / slidesPerView;
+      // Ensure we don't overflow beyond last full page (clamp currentIndex so last visible item aligns)
+      const maxStartIndex = Math.max(0, totalItems - slidesPerView);
+      const startIndex = Math.min(currentIndex, maxStartIndex);
+      const px = startIndex * itemWidth;
+      translateByPixels(px);
+    }
   }
 
-  // Move by one "page" (slidesPerView) so the visible set changes cleanly
-  function moveCarousel(direction) {
-    if (direction === 'next') {
-      currentIndex += slidesPerView;
-      if (currentIndex > maxIndex()) currentIndex = 0; // wrap
+  // Move handlers
+  function next() {
+    if (MOVE_BY_PAGE) {
+      currentPage = (currentPage + 1) % pageCount;
     } else {
-      currentIndex -= slidesPerView;
-      if (currentIndex < 0) currentIndex = Math.max(0, maxIndex());
+      // step by 1
+      currentIndex = Math.min(totalItems - 1, currentIndex + 1);
+      // optional wrap: if you want wrap to 0 when reaching end uncomment:
+      // if (currentIndex >= totalItems) currentIndex = 0;
     }
     updateTransform();
   }
 
+  function prev() {
+    if (MOVE_BY_PAGE) {
+      currentPage = (currentPage - 1 + pageCount) % pageCount;
+    } else {
+      currentIndex = Math.max(0, currentIndex - 1);
+      // optional wrap: if you want wrap to last uncomment:
+      // if (currentIndex < 0) currentIndex = totalItems - 1;
+    }
+    updateTransform();
+  }
+
+  // Autoplay control (single interval)
   function startAutoplay() {
     stopAutoplay();
-    if (slideCount > slidesPerView) {
-      autoplayInterval = setInterval(() => moveCarousel('next'), AUTOPLAY_MS);
+    if ((MOVE_BY_PAGE && pageCount > 1) || (!MOVE_BY_PAGE && totalItems > slidesPerView)) {
+      autoplayInterval = setInterval(next, AUTOPLAY_MS);
     }
   }
-
   function stopAutoplay() {
-    if (autoplayInterval) {
-      clearInterval(autoplayInterval);
-      autoplayInterval = null;
-    }
+    if (autoplayInterval) { clearInterval(autoplayInterval); autoplayInterval = null; }
   }
 
-  // Attach buttons
-  if (prevBtn) prevBtn.addEventListener('click', () => { moveCarousel('prev'); startAutoplay(); });
-  if (nextBtn) nextBtn.addEventListener('click', () => { moveCarousel('next'); startAutoplay(); });
-
-  // Pause on hover
+  // Attach UI
+  if (prevBtn) prevBtn.addEventListener('click', () => { prev(); startAutoplay(); });
+  if (nextBtn) nextBtn.addEventListener('click', () => { next(); startAutoplay(); });
   carousel.addEventListener('mouseenter', stopAutoplay);
   carousel.addEventListener('mouseleave', startAutoplay);
 
-  // Responsive: recompute slidesPerView and widths on resize
+  // Resize: recompute slidesPerView and keep sensible position
   let resizeTimer = null;
   window.addEventListener('resize', () => {
     if (resizeTimer) clearTimeout(resizeTimer);
     resizeTimer = setTimeout(() => {
       const oldSpv = slidesPerView;
-      slidesPerView = getSlidesPerView();
-      updateSlideWidth();
-      // When slidesPerView changed, convert currentIndex to nearest page
-      if (slidesPerView !== oldSpv) {
-        const page = Math.floor(currentIndex / oldSpv);
-        currentIndex = clampIndex(page * slidesPerView);
-      } else {
-        currentIndex = clampIndex(currentIndex);
+      updateLayoutVars();
+      if (MOVE_BY_PAGE && slidesPerView !== oldSpv) {
+        // convert currentPage so we show closest page
+        currentPage = Math.floor((currentPage * oldSpv) / slidesPerView);
+        currentPage = Math.max(0, Math.min(currentPage, pageCount - 1));
+      } else if (!MOVE_BY_PAGE && slidesPerView !== oldSpv) {
+        // keep the same starting item as much as possible
+        currentIndex = Math.min(currentIndex, Math.max(0, totalItems - 1));
       }
       updateTransform();
       startAutoplay();
-    }, 100);
+    }, 120);
   });
 
-  // Initial layout
-  slidesPerView = getSlidesPerView();
-  updateSlideWidth();
-  currentIndex = clampIndex(0);
-  updateTransform();
-  startAutoplay();
-
-  // In case images change layout after load, recalc widths after window load
-  window.addEventListener('load', () => {
-    updateSlideWidth();
+  // initial layout
+  updateLayoutVars();
+  // ensure transforms calculate after fonts/images/layout done
+  window.requestAnimationFrame(() => {
     updateTransform();
+    startAutoplay();
   });
+
+  // recalc after images loaded (sometimes layout changes)
+  window.addEventListener('load', () => { updateLayoutVars(); updateTransform(); });
 });
 
 
