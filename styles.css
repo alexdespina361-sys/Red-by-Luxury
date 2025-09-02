@@ -1099,61 +1099,53 @@ footer {
 }
 
 /* Each slide is a flex item. We set flex-basis per breakpoint so multiple slides can be visible */
-/* container + track */
-.carousel-container { overflow: hidden; }
+/* --- Carousel core --- */
+.carousel-container { overflow: hidden; position: relative; }
 .carousel {
   display: flex;
   transition: transform 0.45s ease;
   will-change: transform;
+  align-items: stretch;
 }
 
-/* Each slide is a flex item. We set flex-basis per breakpoint so multiple slides can be visible */
+/* Each slide is one product (flex item) */
 .carousel-slide {
   box-sizing: border-box;
   padding: 10px;
+  flex: 0 0 100%; /* default: 1 per view */
   display: flex;
   justify-content: center;
-  flex: 0 0 100%; /* fallback: 1 per view */
 }
 
-/* Desktop: 3 products per view */
+/* Desktop: 3 products visible */
 @media (min-width: 1025px) {
-  .carousel-slide { flex: 0 0 33.3333%; }
-  .carousel-slide .product-card { width: 95%; }
+  .carousel-slide { flex: 0 0 33.333333%; }
+  .carousel-slide .product-card { width: 95%; max-width: 420px; }
 }
 
-/* Tablet: 2 products per view */
+/* Tablet: 2 products visible */
 @media (min-width: 769px) and (max-width: 1024px) {
   .carousel-slide { flex: 0 0 50%; }
-  .carousel-slide .product-card { width: 95%; }
+  .carousel-slide .product-card { width: 95%; max-width: 560px; }
 }
 
-/* Mobile: 1 product per view (falls back to 100%) */
+/* Mobile: 1 product visible */
 @media (max-width: 768px) {
   .carousel-slide { flex: 0 0 100%; }
   .carousel-slide .product-card { width: 90%; margin: 10px auto; }
 }
 
-
-/* Product card adjustments for mobile */
-@media (max-width: 768px) {
-    .product-card img {
-        height: 300px;
-    }
-    
-    .product-info h3 {
-        font-size: 1.3rem;
-    }
-    
-    .product-info p {
-        font-size: 0.9rem;
-        min-height: 60px;
-    }
-    
-    .price {
-        font-size: 1.2rem;
-    }
+/* Product card baseline (tweak to taste) */
+.product-card {
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
 }
+
 
 /* Navigation adjustments for mobile */
 @media (max-width: 768px) {
